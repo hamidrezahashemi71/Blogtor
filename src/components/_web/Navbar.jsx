@@ -167,7 +167,7 @@ const Navbar = () => {
               {navigation.map((item) => (
                 <Disclosure.Button
                   key={item.name}
-                  as='a'
+                  as={Link}
                   to={item.to}
                   className={classNames(
                     item.current
