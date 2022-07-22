@@ -27,6 +27,7 @@ const Navbar = () => {
     window.location.reload(false);
     navigate("/");
   };
+
   return (
     <Disclosure as='nav' className='bg-gray-800'>
       {({open}) => (
