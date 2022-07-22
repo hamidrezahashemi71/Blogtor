@@ -15,6 +15,8 @@ import EditProfile from "./pages/_dash/EditProfile";
 import EditBlog from "./pages/_dash/EditBlog";
 import MyBlogs from "./pages/_dash/MyBlogs";
 
+import NotFound from "./components/_general/NotFound";
+
 function App() {
   return (
     <Router>
@@ -35,6 +37,7 @@ function App() {
           <Route path='editblog' element={<EditBlog />} />
           <Route path='myblogs' element={<MyBlogs />} />
         </Route>
+        <Route path='*' element={<NotFound />} />
       </Routes>
     </Router>
   );

@@ -1,13 +1,18 @@
+import {useState} from "react";
 import {Link} from "react-router-dom";
 import ReactStars from "react-stars";
+import NotFound from "../../components/_general/NotFound";
 import AddComment from "../../components/_web/AddComment";
 import Comments from "../../components/_web/Comments";
 
 const SingleBlog = () => {
+  const [notFound, setNotFound] = useState(false);
+
   const ratingChanged = (newRating) => {
     console.log(newRating);
   };
 
+  if (notFound) return <NotFound />;
   return (
     <>
       <article className='pt-12 px-4'>
@@ -33,11 +38,11 @@ const SingleBlog = () => {
             provide the finest performance and meet international standards.
           </p>
           <p className='mb-4'>
-            We’re dedicated to ensure the highest level of customer satisfaction
+            Were dedicated to ensure the highest level of customer satisfaction
             based on long-term professional relationships. By creating the
-            positive working environment we’re enabling our employees to
-            significantly improve not only their productivity, but what’s more
-            important – job satisfaction.
+            positive working environment were enabling our employees to
+            significantly improve not only their productivity, but whats more
+            important job satisfaction.
           </p>
           <ul className='mb-4 list-inside list-disc'>
             <li>High durability</li>
