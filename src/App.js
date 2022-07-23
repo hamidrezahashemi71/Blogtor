@@ -16,6 +16,7 @@ import EditBlog from "./pages/_dash/EditBlog";
 import MyBlogs from "./pages/_dash/MyBlogs";
 
 import NotFound from "./components/_general/NotFound";
+import Welcome from "./components/_general/Welcome";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
         </Route>
 
         <Route path='/dashboard/' element={<DashLayout />}>
+          <Route path='/dashboard/' element={<Welcome />} />
           <Route path='write' element={<PostBlog />} />
           <Route path='profile' element={<EditProfile />} />
           <Route path='editblog' element={<EditBlog />} />

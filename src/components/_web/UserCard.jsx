@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 const UserCard = () => {
   return (
     <Link to={"/users/:id"}>
-      <div className='rounded-3xl overflow-hidden shadow-xl max-w-xs my-3 mx-2 bg-blue-500'>
+      <div className='rounded-3xl overflow-hidden shadow-xl max-w-xs my-3 mx-2 bg-blue-500 hover:bg-blue-700 transition ease-in-out delay-150 '>
         <img src='https://i.imgur.com/dYcYQ7E.png' className='w-full' />
         <div className='flex justify-center -mt-8'>
           <img

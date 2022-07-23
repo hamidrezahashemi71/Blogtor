@@ -1,7 +1,15 @@
 import React from "react";
+import MyBlogCard from "../../components/_web/MyBlogCard";
 
 const MyBlogs = () => {
-  return <div>MyBlogs</div>;
+  return (
+    <>
+      <MyBlogCard />
+      <MyBlogCard />
+      <MyBlogCard />
+      <MyBlogCard />
+    </>
+  );
 };
 
 export default MyBlogs;
