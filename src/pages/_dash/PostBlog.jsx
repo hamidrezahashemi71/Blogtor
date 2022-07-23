@@ -12,7 +12,7 @@ const PostBlog = () => {
   };
 
   return (
-    <form className='pt-12 px-12 ml-52'>
+    <form className='pt-12 px-12 ml-52' onSubmit={(e) => e.preventDefault()}>
       <label htmlFor='chat' className='sr-only'>
         Blog title
       </label>
