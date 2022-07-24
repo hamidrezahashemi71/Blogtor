@@ -18,30 +18,49 @@ import MyBlogs from "./pages/_dash/MyBlogs";
 import NotFound from "./components/_general/NotFound";
 import Welcome from "./components/_general/Welcome";
 
+import {ToastContainer} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path='/' element={<WebLayout />}>
-          <Route path='/' element={<Home />} />
-          <Route path='blogs' element={<Blogs />} />
-          <Route path='blogs/:id' element={<SingleBlog />} />
-          <Route path='users' element={<Users />} />
-          <Route path='users/:id' element={<SingleUser />} />
-          <Route path='login' element={<Login />} />
-          <Route path='signup' element={<Signup />} />
-        </Route>
+    <>
+      <ToastContainer
+        position='top-right'
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+      {/* Same as */}
+      <ToastContainer />
 
-        <Route path='/dashboard/' element={<DashLayout />}>
-          <Route path='/dashboard/' element={<Welcome />} />
-          <Route path='write' element={<PostBlog />} />
-          <Route path='profile' element={<EditProfile />} />
-          <Route path='editblog' element={<EditBlog />} />
-          <Route path='myblogs' element={<MyBlogs />} />
-        </Route>
-        <Route path='*' element={<NotFound />} />
-      </Routes>
-    </Router>
+      <Router>
+        <Routes>
+          <Route path='/' element={<WebLayout />}>
+            <Route path='/' element={<Home />} />
+            <Route path='blogs' element={<Blogs />} />
+            <Route path='blogs/:id' element={<SingleBlog />} />
+            <Route path='users' element={<Users />} />
+            <Route path='users/:id' element={<SingleUser />} />
+            <Route path='login' element={<Login />} />
+            <Route path='signup' element={<Signup />} />
+          </Route>
+
+          <Route path='/dashboard/' element={<DashLayout />}>
+            <Route path='/dashboard/' element={<Welcome />} />
+            <Route path='write' element={<PostBlog />} />
+            <Route path='profile' element={<EditProfile />} />
+            <Route path='editblog' element={<EditBlog />} />
+            <Route path='myblogs' element={<MyBlogs />} />
+          </Route>
+          <Route path='*' element={<NotFound />} />
+        </Routes>
+      </Router>
+    </>
   );
 }
 

@@ -1,6 +1,89 @@
-import {Link} from "react-router-dom";
+import {useState} from "react";
+import {Link, useNavigate} from "react-router-dom";
+import baseUrl from "../../lib/server";
+import axios from "axios";
+import {toast} from "react-toastify";
+import Cookies from "universal-cookie";
+import {useDispatch} from "react-redux";
+import {setCurrentUser} from "../../features/Slice";
 
 const Login = () => {
+  const [userLoginInfo, setUserLoginInfo] = useState({
+    username: "",
+    password: "",
+  });
+
+  const loginData = {
+    username: userLoginInfo.username,
+    password: userLoginInfo.password,
+  };
+
+  const cookies = new Cookies();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const fetchUser = () => {
+    fetch(`${baseUrl}/user/me`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        auth: `ut ${cookies.get("ut")}`,
+      },
+      body: JSON.stringify({}),
+    })
+      .then((res) => {
+        if (res.ok) {
+          console.log("HTTP request successful");
+        } else {
+          console.log("HTTP request unsuccessful");
+        }
+        console.log(res);
+
+        return res.json();
+      })
+      .then((data) => {
+        // console.log(data);
+        if (data.msg === "Unauthorized")
+          setTimeout(() => {
+            navigate("/login");
+          }, 3000);
+
+        if (data._id) dispatch(setCurrentUser(data));
+      });
+  };
+
+  const login = () => {
+    axios
+      .post(`${baseUrl}/user/login`, loginData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((data) => {
+        // console.log(data);
+        console.log(data.data.token);
+        cookies.set("ut", data.data.token, {path: "/"});
+        if (data.data.token) {
+          fetchUser();
+          navigate("/");
+        }
+      })
+      .catch((err) => {
+        console.log(err.response.data.msg);
+
+        if (err.response.data.msg === "bad inputs")
+          return toast.error(
+            "Username or password is wrong! Please enter 1111 as your password."
+          );
+
+        if (err.response.data.msg === "bad request: no such user exists")
+          return toast.error("This username doesn't exist!");
+
+        if (err.response.data.msg === "password doesnt match")
+          return toast.error("Please enter 1111 as your password.");
+      });
+  };
+
   return (
     <section className='h-screen'>
       <div className='px-6 h-full text-gray-800'>
@@ -8,7 +91,7 @@ const Login = () => {
           <div className='grow-0 shrink-1 md:shrink-0 basis-auto xl:w-6/12 lg:w-6/12 md:w-9/12 mb-12 md:mb-0'>
             <img
               src={"assets/images/blog-hero.png"}
-              className='w-full'
+              className='w-[400px]'
               alt='Sample image'
             />
           </div>
@@ -70,6 +153,13 @@ const Login = () => {
               </div>
               <div className='mb-6'>
                 <input
+                  value={userLoginInfo.username}
+                  onChange={(e) =>
+                    setUserLoginInfo({
+                      ...userLoginInfo,
+                      username: e.target.value,
+                    })
+                  }
                   type='text'
                   className='form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none'
                   id='exampleFormControlInput2'
@@ -78,6 +168,13 @@ const Login = () => {
               </div>
               <div className='mb-6'>
                 <input
+                  value={userLoginInfo.password}
+                  onChange={(e) =>
+                    setUserLoginInfo({
+                      ...userLoginInfo,
+                      password: e.target.value,
+                    })
+                  }
                   type='password'
                   className='form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none'
                   id='exampleFormControlInput2'
@@ -105,6 +202,7 @@ const Login = () => {
 
               <div className='text-center lg:text-left'>
                 <button
+                  onClick={login}
                   type='button'
                   className='inline-block px-7 py-3 bg-blue-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out'>
                   Login
