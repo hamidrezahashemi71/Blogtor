@@ -82,14 +82,13 @@ const Sidebar = () => {
           </Link>
         </li>
         <li className='relative'>
-          <Link
-            className='flex items-center text-sm py-4 px-6 h-12 overflow-hidden text-white text-ellipsis whitespace-nowrap rounded hover:text-blue-600 hover:bg-blue-50 transition duration-300 ease-in-out'
-            to={"#"}
+          <p
+            className='flex items-center text-sm py-4 px-6 h-12 overflow-hidden cursor-pointer text-white text-ellipsis whitespace-nowrap rounded hover:text-blue-600 hover:bg-blue-50 transition duration-300 ease-in-out'
             onClick={logout}
             data-mdb-ripple='true'
             data-mdb-ripple-color='primary'>
             <span>Sign Out</span>
-          </Link>
+          </p>
         </li>
       </ul>
       <div className='text-center bottom-0 absolute w-full'>

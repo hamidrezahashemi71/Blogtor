@@ -1,8 +1,46 @@
+import {useState, useEffect} from "react";
 import {Link} from "react-router-dom";
+import Loading from "../../components/_general/Loading";
 import BlogCard from "../../components/_web/BlogCard";
 import UserCard from "../../components/_web/UserCard";
+import baseUrl from "../../lib/server";
 
 const Home = () => {
+  const [loading, setLoading] = useState(true);
+  const [topBlogs, setTopBlogs] = useState(null);
+  const [topUsers, setTopUsers] = useState([]);
+
+  useEffect(() => {
+    fetch(`${baseUrl}/blog/top-blogs`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        // console.log(data);
+        setTopBlogs(data);
+        setLoading(false);
+      });
+  }, []);
+
+  useEffect(() => {
+    fetch(`${baseUrl}/user/top-users`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        // console.log(data);
+        setTopUsers(data);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) return <Loading />;
   return (
     <>
       <div className='relative bg-white overflow-hidden'>
@@ -67,9 +105,15 @@ const Home = () => {
           </h1>
         </div>
         <div className='flex flex-wrap mt-4'>
-          <BlogCard />
-          <BlogCard />
-          <BlogCard />
+          {topBlogs.length === 0 ? (
+            <p className='font-semibold text-center text-xl text-blue-700'>
+              There are no blogs yet!
+            </p>
+          ) : (
+            topBlogs.map((blog) => {
+              return <BlogCard key={blog._id} blog={blog} />;
+            })
+          )}
         </div>
       </div>
       <div className='bg-blue-100 rounded-lg py-2 mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-4 xl:mt-28'>
@@ -79,9 +123,15 @@ const Home = () => {
           </h1>
         </div>
         <div className='flex flex-wrap mt-4'>
-          <UserCard />
-          <UserCard />
-          <UserCard />
+          {topUsers.length === 0 ? (
+            <p className='font-semibold text-center text-xl text-blue-700'>
+              There are no users yet!
+            </p>
+          ) : (
+            topUsers.map((topUser) => {
+              return <UserCard key={topUser._id} user={topUser} />;
+            })
+          )}
         </div>
       </div>
     </>

@@ -91,7 +91,7 @@ function App() {
 
           <Route
             path='/dashboard/'
-            element={currentUser ? <DashLayout /> : <AccessDenied />}>
+            element={currentUser._id ? <DashLayout /> : <AccessDenied />}>
             <Route path='/dashboard/' element={<Welcome />} />
             <Route path='write' element={<PostBlog />} />
             <Route path='profile' element={<EditProfile />} />

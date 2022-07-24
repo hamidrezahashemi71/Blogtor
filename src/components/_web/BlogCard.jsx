@@ -1,6 +1,6 @@
 import {Link} from "react-router-dom";
 
-const BlogCard = () => {
+const BlogCard = ({blog}) => {
   return (
     <div className='max-w-lg mx-3'>
       <div className='bg-white shadow-md border border-gray-200 rounded-lg max-w-sm mb-5'>
