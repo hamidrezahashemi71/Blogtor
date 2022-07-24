@@ -5,6 +5,7 @@ import * as AiIcons from "react-icons/ai";
 import Cookies from "universal-cookie";
 import {useSelector} from "react-redux";
 import {userSelect} from "../../features/Slice";
+import baseUrl from "../../lib/server";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -28,8 +29,9 @@ const Navbar = () => {
     navigate("/");
   };
 
+  console.log(currentUser);
   return (
-    <Disclosure as='nav' className='bg-gray-800'>
+    <Disclosure as='nav' className='bg-gray-800 '>
       {({open}) => (
         <>
           <div className='max-w-7xl mx-auto px-2 sm:px-6 lg:px-8'>
@@ -85,15 +87,20 @@ const Navbar = () => {
               </div>
               <div className='absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0'>
                 {/* Profile dropdown */}
-                {currentUser ? (
+                {currentUser._id ? (
                   <>
-                    <Menu as='div' className='ml-3 relative'>
+                    {console.log(currentUser.avatar)}
+                    <Menu as='div' className='ml-3 relative z-10'>
                       <div>
-                        <Menu.Button className='bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white'>
-                          <span className='sr-only'>Open user menu</span>
+                        <Menu.Button className='bg-gray-200 px-2 flex items-center gap-2 text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white'>
+                          <span>{`Welcome ${currentUser.name}`}</span>
                           <img
                             className='h-8 w-8 rounded-full'
-                            src={"assets/images/user.png"}
+                            src={
+                              currentUser.avatar == ""
+                                ? "assets/images/user.png"
+                                : `${baseUrl}/${currentUser.avatar}`
+                            }
                             alt='user'
                           />
                         </Menu.Button>
@@ -121,15 +128,14 @@ const Navbar = () => {
                           </Menu.Item>
                           <Menu.Item>
                             {({active}) => (
-                              <Link
-                                to='#'
+                              <p
                                 onClick={logout}
                                 className={classNames(
                                   active ? "bg-gray-100" : "",
                                   "block px-4 py-2 text-sm text-gray-700"
                                 )}>
                                 Sign out
-                              </Link>
+                              </p>
                             )}
                           </Menu.Item>
                         </Menu.Items>

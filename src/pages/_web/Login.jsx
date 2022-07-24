@@ -4,9 +4,9 @@ import baseUrl from "../../lib/server";
 import axios from "axios";
 import {toast} from "react-toastify";
 import Cookies from "universal-cookie";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {setCurrentUser} from "../../features/Slice";
-
+import {userSelect} from "../../features/Slice";
 const Login = () => {
   const [userLoginInfo, setUserLoginInfo] = useState({
     username: "",
@@ -21,6 +21,7 @@ const Login = () => {
   const cookies = new Cookies();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const currentUser = useSelector(userSelect);
 
   const fetchUser = () => {
     fetch(`${baseUrl}/user/me`, {
@@ -32,13 +33,6 @@ const Login = () => {
       body: JSON.stringify({}),
     })
       .then((res) => {
-        if (res.ok) {
-          console.log("HTTP request successful");
-        } else {
-          console.log("HTTP request unsuccessful");
-        }
-        console.log(res);
-
         return res.json();
       })
       .then((data) => {
@@ -61,10 +55,11 @@ const Login = () => {
       })
       .then((data) => {
         // console.log(data);
-        console.log(data.data.token);
+        // console.log(data.data.token);
         cookies.set("ut", data.data.token, {path: "/"});
         if (data.data.token) {
           fetchUser();
+          toast.success("Welcome!");
           navigate("/");
         }
       })

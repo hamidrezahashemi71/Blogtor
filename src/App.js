@@ -23,6 +23,7 @@ import MyBlogs from "./pages/_dash/MyBlogs";
 import NotFound from "./components/_general/NotFound";
 import Loading from "./components/_general/Loading";
 import Welcome from "./components/_general/Welcome";
+import AccessDenied from "./components/_general/AccessDenied";
 
 import {ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -91,7 +92,7 @@ function App() {
 
           <Route
             path='/dashboard/'
-            element={currentUser ? <DashLayout /> : <AccessDenied />}>
+            element={currentUser._id ? <DashLayout /> : <AccessDenied />}>
             <Route path='/dashboard/' element={<Welcome />} />
             <Route path='write' element={<PostBlog />} />
             <Route path='profile' element={<EditProfile />} />
