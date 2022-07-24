@@ -34,7 +34,7 @@ import {setCurrentUser, userSelect} from "./features/Slice";
 function App() {
   const [loading, setLoading] = useState(true);
   const cookies = new Cookies();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch(); 
   const currentUser = useSelector(userSelect);
 
   useEffect(() => {
