@@ -1,5 +1,10 @@
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 
+import {useState, useEffect} from "react";
+import baseUrl from "./lib/server";
+
+import Cookies from "universal-cookie";
+
 import WebLayout from "./layouts/WebLayout";
 import Blogs from "./pages/_web/Blogs";
 import Home from "./pages/_web/Home";
@@ -16,12 +21,46 @@ import EditBlog from "./pages/_dash/EditBlog";
 import MyBlogs from "./pages/_dash/MyBlogs";
 
 import NotFound from "./components/_general/NotFound";
+import Loading from "./components/_general/Loading";
 import Welcome from "./components/_general/Welcome";
 
 import {ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import {useDispatch, useSelector} from "react-redux";
+import {setCurrentUser, userSelect} from "./features/Slice";
+
 function App() {
+  const [loading, setLoading] = useState(true);
+  const cookies = new Cookies();
+  const dispatch = useDispatch();
+  const currentUser = useSelector(userSelect);
+
+  useEffect(() => {
+    fetch(`${baseUrl}/user/me`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        auth: `ut ${cookies.get("ut")}`,
+      },
+      body: JSON.stringify({}),
+    })
+      .then((res) => {
+        if (res.ok) {
+          console.log("HTTP request successful");
+        } else {
+          console.log("HTTP request unsuccessful");
+        }
+        setLoading(false);
+        return res.json();
+      })
+      .then((data) => {
+        dispatch(setCurrentUser(data));
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) return <Loading />;
   return (
     <>
       <ToastContainer
@@ -50,7 +89,9 @@ function App() {
             <Route path='signup' element={<Signup />} />
           </Route>
 
-          <Route path='/dashboard/' element={<DashLayout />}>
+          <Route
+            path='/dashboard/'
+            element={currentUser ? <DashLayout /> : <AccessDenied />}>
             <Route path='/dashboard/' element={<Welcome />} />
             <Route path='write' element={<PostBlog />} />
             <Route path='profile' element={<EditProfile />} />
