@@ -29,7 +29,6 @@ const Navbar = () => {
     navigate("/");
   };
 
-  console.log(currentUser);
   return (
     <Disclosure as='nav' className='bg-gray-800 '>
       {({open}) => (
@@ -89,7 +88,6 @@ const Navbar = () => {
                 {/* Profile dropdown */}
                 {currentUser._id ? (
                   <>
-                    {console.log(currentUser.avatar)}
                     <Menu as='div' className='ml-3 relative z-10'>
                       <div>
                         <Menu.Button className='bg-gray-200 px-2 flex items-center gap-2 text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white'>

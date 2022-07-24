@@ -1,9 +1,13 @@
 import {Link, useNavigate} from "react-router-dom";
 import Cookies from "universal-cookie";
+import {useSelector} from "react-redux";
+import {userSelect} from "../../features/Slice";
+import baseUrl from "../../lib/server";
 
 const Sidebar = () => {
   const navigate = useNavigate();
   const cookies = new Cookies();
+  const currentUser = useSelector(userSelect);
 
   const logout = () => {
     cookies.remove("ut", {path: "/"});
@@ -20,14 +24,18 @@ const Sidebar = () => {
           <div className='flex items-center'>
             <div className='shrink-0'>
               <img
-                src={"assets/images/user.png"}
+                src={
+                  currentUser.avatar == ""
+                    ? "assets/images/user.png"
+                    : `${baseUrl}/${currentUser.avatar}`
+                }
                 className='rounded-full w-10'
                 alt='Avatar'
               />
             </div>
             <div className='grow ml-3'>
               <p className='text-sm font-semibold text-blue-600'>
-                Jason McCoel
+                {currentUser.name}
               </p>
             </div>
           </div>

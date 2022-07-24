@@ -52,7 +52,6 @@ function App() {
         } else {
           console.log("HTTP request unsuccessful");
         }
-        setLoading(false);
         return res.json();
       })
       .then((data) => {
@@ -92,7 +91,7 @@ function App() {
 
           <Route
             path='/dashboard/'
-            element={currentUser._id ? <DashLayout /> : <AccessDenied />}>
+            element={currentUser ? <DashLayout /> : <AccessDenied />}>
             <Route path='/dashboard/' element={<Welcome />} />
             <Route path='write' element={<PostBlog />} />
             <Route path='profile' element={<EditProfile />} />

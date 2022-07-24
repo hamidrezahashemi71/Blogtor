@@ -24,32 +24,25 @@ const Signup = () => {
   const dispatch = useDispatch();
 
   const fetchUser = () => {
-    fetch(`${baseUrl}/user/me`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        auth: `ut ${cookies.get("ut")}`,
-      },
-      body: JSON.stringify({}),
-    })
-      .then((res) => {
-        if (res.ok) {
-          console.log("HTTP request successful");
-        } else {
-          console.log("HTTP request unsuccessful");
+    axios
+      .post(
+        `${baseUrl}/user/me`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+            auth: `ut ${cookies.get("ut")}`,
+          },
         }
-        console.log(res);
-
-        return res.json();
-      })
+      )
       .then((data) => {
         // console.log(data);
-        if (data.msg === "Unauthorized")
+        if (data.data.msg === "Unauthorized")
           setTimeout(() => {
             navigate("/login");
           }, 3000);
 
-        if (data._id) dispatch(setCurrentUser(data));
+        if (data.data._id) dispatch(setCurrentUser(data.data));
       });
   };
 
@@ -132,7 +125,7 @@ const Signup = () => {
                   Already have an account?
                   <Link
                     to={"/login"}
-                    className='text-red-600 hover:text-red-700 focus:text-red-700 transition duration-200 ease-in-out'>
+                    className='ml-2 text-red-600 hover:text-red-700 focus:text-red-700 transition duration-200 ease-in-out'>
                     Login
                   </Link>
                 </p>
