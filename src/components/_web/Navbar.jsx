@@ -96,7 +96,7 @@ const Navbar = () => {
                             className='h-8 w-8 rounded-full'
                             src={
                               currentUser.avatar == ""
-                                ? "assets/images/user.png"
+                                ? "/assets/images/user.png"
                                 : `${baseUrl}/${currentUser.avatar}`
                             }
                             alt='user'

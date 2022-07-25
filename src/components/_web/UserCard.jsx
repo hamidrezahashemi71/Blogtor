@@ -3,17 +3,19 @@ import moment from "moment";
 import baseUrl from "../../lib/server";
 
 const UserCard = ({user}) => {
+
   return (
-    <Link to={"/users/:id"}>
+    <Link to={`/users/${user._id}`}>
       <div className='rounded-3xl overflow-hidden shadow-xl max-w-xs my-3 mx-2 bg-blue-500 hover:bg-blue-700 transition ease-in-out delay-150 '>
         <img src='https://i.imgur.com/dYcYQ7E.png' className='w-full' />
         <div className='flex justify-center -mt-8'>
           <img
             src={
               user.avatar == ""
-                ? "assets/images/user.png"
+                ? "/assets/images/user.png"
                 : `${baseUrl}/${user.avatar}`
             }
+            alt='user'
             className='rounded-full border-solid border-white border-2 -mt-3 h-24'
           />
         </div>

@@ -6,9 +6,9 @@ import UserCard from "../../components/_web/UserCard";
 import baseUrl from "../../lib/server";
 
 const Home = () => {
-  const [loading, setLoading] = useState(true);
   const [topBlogs, setTopBlogs] = useState(null);
   const [topUsers, setTopUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch(`${baseUrl}/blog/top-blogs`, {
