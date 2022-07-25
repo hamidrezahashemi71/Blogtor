@@ -26,16 +26,20 @@ const Users = () => {
   if (loading) return <Loading />;
   return (
     <>
-      <Search />
+      <Search searchVal={searchVal} setSearchVal={setSearchVal} />
       <div className='flex flex-wrap p-10 mx-auto '>
         {allUsers.length === 0 ? (
           <p className='font-semibold text-center text-xl text-blue-700'>
             There are no users yet!
           </p>
         ) : (
-          allUsers.map((user) => {
-            return <UserCard key={user._id} user={user} />;
-          })
+          allUsers
+            .filter((user) =>
+              user.username.toLowerCase().includes(searchVal.toLowerCase())
+            )
+            .map((user) => {
+              return <UserCard key={user._id} user={user} />;
+            })
         )}
       </div>
     </>

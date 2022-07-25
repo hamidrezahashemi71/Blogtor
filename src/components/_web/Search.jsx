@@ -1,10 +1,12 @@
 import React from "react";
 
-const Search = () => {
+const Search = ({searchVal, setSearchVal}) => {
   return (
     <div className='flex justify-center mt-7'>
       <div className='mb-3 xl:w-96'>
         <input
+          value={searchVal}
+          onChange={(e) => setSearchVal(e.target.value)}
           type='search'
           className='
         form-control
