@@ -95,7 +95,7 @@ function App() {
             <Route path='/dashboard/' element={<Welcome />} />
             <Route path='write' element={<PostBlog />} />
             <Route path='profile' element={<EditProfile />} />
-            <Route path='editblog' element={<EditBlog />} />
+            <Route path='editblog/:id' element={<EditBlog />} />
             <Route path='myblogs' element={<MyBlogs />} />
           </Route>
           <Route path='*' element={<NotFound />} />

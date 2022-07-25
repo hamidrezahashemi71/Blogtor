@@ -16,7 +16,7 @@ const UserCard = ({user}) => {
                 : `${baseUrl}/${user.avatar}`
             }
             alt='user'
-            className='rounded-full border-solid border-white border-2 -mt-3 h-24'
+            className='aspect-square object-cover cursor-pointer w-24 h-24 rounded-full '
           />
         </div>
         <div className='text-center px-3 pb-6 pt-2'>

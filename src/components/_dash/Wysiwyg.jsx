@@ -5,7 +5,11 @@ const Wysiwyg = (props) => {
     <div className='mt-4'>
       <Editor
         onInit={(evt, editor) => (props.editorRef.current = editor)}
-        initialValue='<p>This is the initial content of the editor.</p>'
+        initialValue={
+          props.initialValue
+            ? props.initialValue
+            : "<p>This is the initial content of the editor.</p>"
+        }
         init={{
           height: 500,
           menubar: false,

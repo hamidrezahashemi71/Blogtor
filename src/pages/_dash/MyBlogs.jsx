@@ -1,5 +1,5 @@
 import {useState, useEffect} from "react";
-import MyBlogCard from "../../components/_web/MyBlogCard";
+import MyBlogCard from "../../components/_dash/MyBlogCard";
 import baseUrl from "../../lib/server";
 import Loading from "../../components/_general/Loading";
 import Cookies from "universal-cookie";

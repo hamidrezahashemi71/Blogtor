@@ -1,5 +1,5 @@
 import {useState, useEffect} from "react";
-import {Link, useParams} from "react-router-dom";
+import {Link, useParams, useNavigate} from "react-router-dom";
 import ReactStars from "react-stars";
 import NotFound from "../../components/_general/NotFound";
 import Loading from "../../components/_general/Loading";
@@ -15,6 +15,7 @@ const SingleBlog = () => {
   const [comments, setComments] = useState([]);
   const [myComment, setMyComment] = useState("");
   const params = useParams();
+  const navigate = useNavigate();
   const cookies = new Cookies();
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
@@ -28,7 +29,7 @@ const SingleBlog = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         if (data.msg === "Unexpected token u in JSON at position 0") {
           setNotFound(true);
         }
@@ -114,6 +115,13 @@ const SingleBlog = () => {
           }
           alt=''
         />
+        <button
+          onClick={() => navigate(-1)}
+          className='bg-pink-500 active:bg-pink-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1'
+          type='button'
+          style={{transition: "all .15s ease"}}>
+          Back
+        </button>
         <p className='text-center'>
           <span>{`${moment(snigleBlog.createdAt).format(
             "dddd, MMMM Do YYYY"

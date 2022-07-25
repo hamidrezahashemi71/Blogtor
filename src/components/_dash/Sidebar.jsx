@@ -29,7 +29,7 @@ const Sidebar = () => {
                     ? "/assets/images/user.png"
                     : `${baseUrl}/${currentUser.avatar}`
                 }
-                className='rounded-full w-10'
+                className='aspect-square object-cover cursor-pointer w-10 h-10 rounded-full'
                 alt='Avatar'
               />
             </div>

@@ -1,4 +1,5 @@
 import {Link} from "react-router-dom";
+import baseUrl from "../../lib/server";
 
 const BlogCard = ({blog}) => {
   return (
@@ -29,9 +30,9 @@ const BlogCard = ({blog}) => {
                       src={
                         blog.creator.avatar === ""
                           ? "/assets/images/user.png"
-                          : blog.creator.avatar
+                          : `${baseUrl}/${blog.creator.avatar}`
                       }
-                      className='rounded-full w-10'
+                      className='aspect-square object-cover cursor-pointer m-1 w-10 h-10 rounded-full'
                       alt='Avatar'
                     />
                   </div>

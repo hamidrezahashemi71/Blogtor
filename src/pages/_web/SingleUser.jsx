@@ -119,7 +119,7 @@ const SingleUser = () => {
                             ? "/assets/images/user.png"
                             : `${baseUrl}/${user.avatar}`
                         }
-                        className='shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16'
+                        className='shadow-xl rounded-full h-32 w-32 align-middle border-none absolute -m-16 lg:-ml-16 aspect-square object-cover'
                         style={{maxWidth: "150px"}}
                       />
                     </div>
@@ -222,7 +222,7 @@ const SingleUser = () => {
             <p>{`${user.username} has not posted any blogs yet.`}</p>
           ) : (
             thisUserBlogs.map((blog) => {
-              return <BlogCard blog={blog} />;
+              return <BlogCard key={blog._id} blog={blog} />;
             })
           )}
         </div>
