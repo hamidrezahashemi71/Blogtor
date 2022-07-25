@@ -6,12 +6,15 @@ import NotFound from "../../components/_general/NotFound";
 import baseUrl from "../../lib/server";
 import moment from "moment";
 import BlogCard from "../../components/_web/BlogCard";
+import Cookies from "universal-cookie";
+import {toast} from "react-toastify";
 
 const SingleUser = () => {
   const [user, setUser] = useState(null);
   const [thisUserBlogs, setThisUserBlogs] = useState([]);
   const [notFound, setNotFound] = useState(false);
   const params = useParams();
+  const cookies = new Cookies();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
 
@@ -48,8 +51,25 @@ const SingleUser = () => {
       });
   }, []);
 
-  const ratingChanged = (newRating) => {
-    console.log(newRating);
+  const submitRate = (newRating) => {
+    if (!cookies.get("ut"))
+      return toast.warn("Only Blogtor users can submit ratings!");
+    fetch(`${baseUrl}/blog/submit-rate`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        auth: `ut ${cookies.get("ut")}`,
+      },
+      body: JSON.stringify({
+        blogId: params.id,
+        score: Number(newRating),
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(data))
+      .then(() => {
+        return toast.success("Thanks for contributing!");
+      });
   };
 
   if (loading) return <Loading />;
@@ -180,7 +200,7 @@ const SingleUser = () => {
           <p className='text-center text-white'>Rate This User:</p>
           <ReactStars
             count={5}
-            onChange={ratingChanged}
+            onChange={submitRate}
             size={24}
             color2={"#ffd700"}
           />

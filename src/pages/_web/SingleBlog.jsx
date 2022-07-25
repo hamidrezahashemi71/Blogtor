@@ -98,7 +98,7 @@ const SingleBlog = () => {
 
   if (loading) return <Loading />;
   if (notFound) return <NotFound />;
-  console.log(snigleBlog);
+  // console.log(snigleBlog);
   return (
     <>
       <article className='pt-12 px-4'>
