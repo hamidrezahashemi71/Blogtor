@@ -25,6 +25,7 @@ const Blogs = () => {
   }, []);
 
   if (loading) return <Loading />;
+  // console.log(blogs);
   return (
     <>
       <Search searchVal={searchVal} setSearchVal={setSearchVal} />

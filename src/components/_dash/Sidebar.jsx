@@ -26,7 +26,7 @@ const Sidebar = () => {
               <img
                 src={
                   currentUser.avatar == ""
-                    ? "assets/images/user.png"
+                    ? "/assets/images/user.png"
                     : `${baseUrl}/${currentUser.avatar}`
                 }
                 className='rounded-full w-10'

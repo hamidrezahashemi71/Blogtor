@@ -1,72 +1,133 @@
-import {useState} from "react";
-import {Link} from "react-router-dom";
+import {useState, useEffect} from "react";
+import {Link, useParams} from "react-router-dom";
 import ReactStars from "react-stars";
 import NotFound from "../../components/_general/NotFound";
+import Loading from "../../components/_general/Loading";
+import baseUrl from "../../lib/server";
 import AddComment from "../../components/_web/AddComment";
 import Comments from "../../components/_web/Comments";
+import moment from "moment";
+import Cookies from "universal-cookie";
+import {toast} from "react-toastify";
 
 const SingleBlog = () => {
+  const [snigleBlog, setSingleBlog] = useState({});
+  const [comments, setComments] = useState([]);
+  const [myComment, setMyComment] = useState("");
+  const params = useParams();
+  const cookies = new Cookies();
+  const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
 
-  const ratingChanged = (newRating) => {
-    console.log(newRating);
+  useEffect(() => {
+    fetch(`${baseUrl}/blog/single-blog/${params.id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        if (data.msg === "Unexpected token u in JSON at position 0") {
+          setNotFound(true);
+        }
+        setSingleBlog(data);
+        setLoading(false);
+      });
+  }, []);
+
+  useEffect(() => {
+    fetch(`${baseUrl}/comment/by-blog/${snigleBlog._id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => setComments(data));
+  }, [comments]);
+
+  const submitRate = (newRating) => {
+    if (!cookies.get("ut"))
+      return toast.warn("Only Blogtor users can submit ratings!");
+    fetch(`${baseUrl}/blog/submit-rate`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        auth: `ut ${cookies.get("ut")}`,
+      },
+      body: JSON.stringify({
+        blogId: params.id,
+        score: Number(newRating),
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(data))
+      .then(() => {
+        return toast.success("Thanks for contributing!");
+      });
   };
 
+  const commentBlog = () => {
+    if (!cookies.get("ut"))
+      return toast.warn("Only Blogtor users can submit comments!");
+    fetch(`${baseUrl}/comment/submit`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        auth: `ut ${cookies.get("ut")}`,
+      },
+      body: JSON.stringify({
+        blogId: String(snigleBlog._id),
+        text: myComment,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        if (data.msg === "Unauthorized")
+          return toast.warn("for submiting a comment, please login first.");
+        if (data.msg === "bad request: bad inputs")
+          return toast.error("Field cannot be empty!");
+        if (data.msg === "ok")
+          return toast.success("Your comment added successfully!");
+      })
+      .then(setMyComment(""));
+  };
+
+  if (loading) return <Loading />;
   if (notFound) return <NotFound />;
+  console.log(snigleBlog);
   return (
     <>
       <article className='pt-12 px-4'>
         <h1 className='text-4xl text-center mb-4 font-semibold font-heading'>
-          The Official Dunder Mifflin Scranton Diary
+          {snigleBlog.title}
         </h1>
         <img
           className='rounded-t-lg mx-auto my-2 h-[500px] w-auto'
-          src='https://flowbite.com/docs/images/blog/image-1.jpg'
+          src={
+            snigleBlog.imgurl === ""
+              ? "/assets/images/blog-image.webp"
+              : snigleBlog.imgurl
+          }
           alt=''
         />
         <p className='text-center'>
-          <span>October 22, by</span>
-          <Link className='ml-1 text-indigo-600 hover:underline' to='#'>
-            Michael Scott
+          <span>{`${moment(snigleBlog.createdAt).format(
+            "dddd, MMMM Do YYYY"
+          )} , by`}</span>
+          <Link
+            className='ml-1 text-indigo-600 hover:underline'
+            to={`/users/${snigleBlog.creator._id}`}>
+            {snigleBlog.creator.name}
           </Link>
         </p>
 
-        <div className='max-w-3xl mx-auto'>
-          <p className='mb-4'>
-            We offer a dependable and quick supply of copy paper suited to all
-            kinds of printers. Each of our various products is designed to
-            provide the finest performance and meet international standards.
-          </p>
-          <p className='mb-4'>
-            Were dedicated to ensure the highest level of customer satisfaction
-            based on long-term professional relationships. By creating the
-            positive working environment were enabling our employees to
-            significantly improve not only their productivity, but whats more
-            important job satisfaction.
-          </p>
-          <ul className='mb-4 list-inside list-disc'>
-            <li>High durability</li>
-            <li>Value-based price</li>
-            <li>Perfect performance on copy machines</li>
-            <li>Long lasting whiteness</li>
-          </ul>
-          <p className='mb-10'>
-            We deliver our services with passion and dedication unmatched by
-            other so called “big players”. We create a friendly environment for
-            our workers and that’s what makes their dedication soar to the
-            maximum. You are getting not only the best possible product, but
-            also our love for paper (completely free of charge).
-          </p>
-          <blockquote className='text-center mb-10'>
-            <p className='text-lg font-semibold mb-2'>
-              "I would say I kind of have an unfair advantage, because I watch
-              reality dating shows like a hawk, and I learn. I absorb
-              information from the strategies of the winners and the losers.
-              Actually, I probably learn more from the losers."
-            </p>
-            <footer className='text-gray-400'>Michael Scott</footer>
-          </blockquote>
-        </div>
+        <div
+          className='max-w-3xl mx-auto text-center mt-3'
+          dangerouslySetInnerHTML={{__html: snigleBlog.content}}></div>
       </article>
       <div className='flex items-center justify-between my-5 px-10 py-5 max-w-3xl mx-auto bg-gray-700 rounded-lg'>
         <div>
@@ -74,7 +135,7 @@ const SingleBlog = () => {
           <ReactStars
             count={5}
             edit={false}
-            value={4}
+            value={snigleBlog.averageScore}
             size={24}
             color2={"#ffd700"}
           />
@@ -83,14 +144,18 @@ const SingleBlog = () => {
           <p className='text-center text-white'>Rate This Blog:</p>
           <ReactStars
             count={5}
-            onChange={ratingChanged}
+            onChange={submitRate}
             size={24}
             color2={"#ffd700"}
           />
         </div>
       </div>
-      <AddComment />
-      <Comments />
+      <AddComment
+        commentBlog={commentBlog}
+        myComment={myComment}
+        setMyComment={setMyComment}
+      />
+      <Comments comments={comments} />
     </>
   );
 };
